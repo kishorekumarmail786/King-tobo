@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* CSS code for styling the webpage */
+    body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  text-align: center;
+  color: #333333;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  max-width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.box {
+  width: 75px; /* Set a fixed width for the box */
+  height: 75px; /* Set a fixed height for the box */
+  margin: 3px;
+  border: 3px solid #f8f8ff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-image: url("https://drive.google.com/uc?id=18ixUQo9RR8q0VGK5MeNqVL_U2hjawKUC");
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+
+.box:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
+.box.revealed img {
+  display: block;
+}
+
+.play-now-btn {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.play-now-btn button {
+  padding: 10px 20px;
+  font-size: 18px;
+  background-color: #333333;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.game-started-message {
+  display: none;
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.hidden {
+  display: none;
+}
+
+.container {
+  position: relative;
+}
+
+.game-over {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  margin-top: 20px;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.countdown {
+  text-align: center;
+  font-size: 24px;
+  margin-top: 20px;
+  animation: countdownScale 1s infinite alternate;
+}
+
+.display-box {
+  text-align: center;
+  margin-top: 20px;
+  animation: displayBoxFade 1s;
+  display: none;
+}
+
+.center-button {
+  display: block;
+  margin: 0 auto;
+}
+
+.box:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.box:hover:before {
+  opacity: 1;
+}
+
+.box:after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, rgba(0, 0, 0, 0) 70%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.box:hover:after {
+  opacity: 1;
+}
+
+.box img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateZ(1px);
+}
+
+@media (min-width: 768px) {
+  .box {
+    width: calc((100% - 60px) / 3);
+    padding-bottom: calc((100vh - 60px) / 3);
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    justify-content: flex-start;
+  }
+}
+
+    .play-now-btn {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .play-now-btn button {
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #333333;
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .game-started-message {
+      display: none;
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .container {
+      position: relative; /* Add position relative to the container */
+    }
+
+    .game-over {
+      display: none;
+      position: absolute; /* Position the game-over message */
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px;
+      margin-top: 20px;
+      opacity: 0; /* Set initial opacity to 0 */
+      transition: opacity 0.5s; /* Add a transition effect for opacity */
+    }
+
+    .countdown {
+      text-align: center;
+      font-size: 24px;
+      margin-top: 20px;
+      animation: countdownScale 1s infinite alternate;
+    }
+
+    @keyframes countdownScale {
+      0% {
+        transform: scale(1);
+      }
+      100% {
+        transform: scale(1.1);
+      }
+    }
+
+    .display-box {
+      text-align: center;
+      margin-top: 20px;
+      animation: displayBoxFade 1s;
+      display: none;
+    }
+
+    @keyframes displayBoxFade {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Additional animations, visual effects, and graphics */
+    .box {
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+    }
+
+    .center-button {
+      display: block;
+      margin: 0 auto;
+    }
+
+    .box:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .box:hover:before {
+      opacity: 1;
+    }
+    .box:after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 120%;
+      height: 120%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, rgba(0, 0, 0, 0) 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .box:hover:after {
+      opacity: 1;
+    }
+    .box img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: translateZ(1px);
+    }
+
+    /* Login form styles */
+    .login-container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-container h2 {
+      text-align: center;
+      color: #333333;
+      margin-bottom: 20px;
+    }
+
+    .login-container label {
+      display: block;
+      margin-bottom: 10px;
+      color: #333333;
+    }
+
+    .login-container input[type="text"],
+    .login-container input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #cccccc;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+
+    .login-container button {
+      width: 100%;
+      padding: 10px;
+      background-color: #333333;
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+  </style>
+</head>
+<body>
+  <h1>King Tobo</h1>
+  
+
+  <div class="play-now-btn">
+    <button id="play-now-button" class="center-button">Play Now</button>
+    <button id="play-next-button" style="display: none;">Play Next</button>
+  </div>
+
+  <div class="game-started-message" id="game-started-message" style="display: none;">
+    Game Started!
+    <div id="chicken-legs-display">10 Chicken Legs</div>
+    <div id="money-display">Rs. 100</div>
+  </div>
+
+
+  <div class="container">
+    <!-- HTML code for creating the grid of boxes -->
+    <div class="box" id="box1"></div>
+    <div class="box" id="box2"></div>
+    <div class="box" id="box3"></div>
+    <div class="box" id="box4"></div>
+    <div class="box" id="box5"></div>
+    <div class="box" id="box6"></div>
+    <div class="box" id="box7"></div>
+    <div class="box" id="box8"></div>
+    <div class="box" id="box9"></div>
+  </div>
+  <div class="container">
+    <div class="game-over" id="game-over-message">Game Over</div>
+    <div class="display-box">
+      <div id="chicken-legs-display">10 Chicken Legs</div>
+      <div id="money-display">Rs. 100</div>
+    </div>
+    <div class="countdown" id="countdown-timer">60</div>
+  </div>
+<script>
+// JavaScript code
+    var boxes = document.querySelectorAll(".box");
+    var countdownTimer = document.getElementById("countdown-timer");
+    var chickenLegsDisplay = document.getElementById("chicken-legs-display");
+    var moneyDisplay = document.getElementById("money-display");
+    var goldenLionSound = new Audio("https://drive.google.com/uc?id=1E-krvSk8YOZ2cVaDA7Pk_qx6QEx4_u4Z");
+    var gameStartedMessage = document.getElementById("game-started-message");
+    var playNowButton = document.getElementById("play-now-button");
+    var playNextButton = document.getElementById("play-next-button"); // Get the "Play Next" button
+
+		
+
+
+
+// Variables for chicken legs and money
+var chickenLegs = 10;
+var money = 100;
+var clickCount = 0; // Track the number of clicks
+
+// Create an array of image sources and alt attributes
+var images = [
+  { src: "https://drive.google.com/uc?id=1bP60qTQJcBsoDl8UXiyX4kMzRY-kat9N", alt: "Image 1" },
+  { src: "https://drive.google.com/uc?id=139cEmZQW-UqkVPHvtVG-nJt_Iat8iqhS", alt: "Image 2" },
+  { src: "https://drive.google.com/uc?id=1ctig8e5y6qmlKkhVYMEa02dLrBDbMWbK", alt: "Image 3" },
+  { src: "https://drive.google.com/uc?id=150Bsp073E5_NqAcMZm0Rs3eZauJkSuGu", alt: "Image 4" },
+  { src: "https://drive.google.com/uc?id=1brKZrNmDXjmABrDBDrcuMyCEvW4Ig5T9", alt: "Image 5" },
+  { src: "https://drive.google.com/uc?id=1eicV1UVa6loerwhWlXQC2uWFXp1cFylt", alt: "Image 6" },
+  { src: "https://drive.google.com/uc?id=19uGEmcalGNvj5AbvKn9xfC6-7QGIJuIw", alt: "Image 7" },
+  { src: "https://drive.google.com/uc?id=198ZoGQgLClwp0YWpRcRDHk1kMV6Lc6zw", alt: "Golden Hen" },
+  { src: "https://drive.google.com/uc?id=1ZcI3nWbqItHGzk118o4YFcGYuCKPpUgY", alt: "Golden Lion" }
+];
+
+// Shuffle the array of images using the Fisher-Yates algorithm
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (currentIndex !== 0) {
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
+
+// Function to update the images randomly
+function updateImagesRandomly() {
+  shuffle(images);
+
+  // Loop through the boxes and assign a new image source and alt attribute to each box
+  for (var i = 0; i < boxes.length; i++) {
+    var image = document.createElement("img");
+    image.src = images[i].src;
+    image.alt = images[i].alt;
+    boxes[i].innerHTML = "";
+    boxes[i].appendChild(image);
+  }
+}
+
+// Loop through the boxes and add a click event listener to each box
+for (var i = 0; i < boxes.length; i++) {
+  boxes[i].addEventListener("click", function () {
+    if (countdown > 0 && clickCount < 9 && !this.classList.contains("revealed")) {
+      clickCount++;
+      var image = this.querySelector("img");
+      if (image) {
+        image.style.display = "block";
+        image.style.opacity = 0;
+        image.style.transition = "opacity 1s";
+        setTimeout(function () {
+          image.style.opacity = 1;
+          if (image.alt === "Golden Lion") {
+            goldenLionSound.play(); // Play the Golden Lion sound
+            chickenLegs /= 2; // Divide chicken legs by 2
+            updateChickenLegsDisplay();
+            updateMoneyDisplay();
+          } else if (image.alt === "Golden Hen") {
+            goldenLionSound.play(); // Play the Golden Lion sound
+            chickenLegs *= 2; // Multiply chicken legs by 2
+            updateChickenLegsDisplay();
+            updateMoneyDisplay();
+          } else {
+            var number = parseInt(image.alt.split(" ")[1]);
+            chickenLegs += number; // Add number of chicken legs
+            updateChickenLegsDisplay();
+            updateMoneyDisplay();
+          }
+
+          var revealedImages = document.querySelectorAll(".box.revealed img");
+          if (revealedImages.length >= 9) {
+            showCongratulationsPopup();
+          }
+        }, 100);
+      }
+
+      this.classList.add("revealed"); // Add the "revealed" class to the box
+    }
+  });
+}
+
+// Countdown timer
+var timer;
+var countdown = 60;
+var gameOverMessage = document.getElementById("game-over-message");
+var playNowButton = document.getElementById("play-now-button");
+var playNextButton = document.getElementById("play-next-button"); // Get the "Play Next" button
+
+playNextButton.addEventListener("click", function () {
+  // Define the behavior for the "Play Next" button
+  // This could include resetting the game, updating images, etc.
+
+  // Reset the click count
+  clickCount = 0;
+
+  // Update the images with new sources
+  updateImagesForPlayNext();
+
+  // Hide the game-over message
+  gameOverMessage.style.opacity = 0;
+
+  // Hide the "Play Next" button
+  playNextButton.style.display = "none";
+
+  // Show the "Play Now" button
+  playNowButton.style.display = "inline-block";
+
+  // Reset the countdown timer
+  countdown = 60;
+  updateCountdown(); // Update the countdown display
+
+  // Clear the previous timer (if any)
+  clearInterval(timer);
+
+  // Start the new timer
+  startTimer();
+});
+
+// Function to update the images for the "Play Next" button
+  function updateImagesForPlayNext() {
+    // Get the new image source
+    var newImageSource = "https://drive.google.com/uc?id=1oNdVk74uLN0ccXcjA47iQcBhRv3-sNeu";
+
+    // Loop through the boxes and update the image sources
+    for (var i = 0; i < boxes.length; i++) {
+      var image = document.createElement("img");
+      image.src = newImageSource;
+      image.alt = "Image " + (i + 1);
+      boxes[i].innerHTML = "";
+      boxes[i].appendChild(image);
+      boxes[i].classList.remove("revealed"); // Remove the "revealed" class from the box
+    }
+  }
+
+  function updateCountdown() {
+    countdownTimer.textContent = countdown < 10 ? "0" + countdown : countdown;
+  }
+
+  function startTimer() {
+    timer = setInterval(function () {
+      countdown--;
+      updateCountdown(); // Update the countdown display
+      if (countdown === 0 || clickCount === 9) { // Stop the timer when countdown reaches 0 or all boxes are clicked
+        clearInterval(timer);
+        gameOverMessage.style.opacity = 1; // Show the game-over message
+        return;
+      }
+    }, 1000);
+  }
+
+  // Click event listener for the "Play Now" button
+  // Click event listener for the "Play Now" button
+playNowButton.addEventListener("click", function () {
+  clickCount = 0; // Reset the click count
+  // Update the images randomly
+  updateImagesRandomly();
+
+  // Reset the countdown timer
+  countdown = 60;
+  updateCountdown(); // Update the countdown display
+
+  // Clear the previous timer (if any)
+  clearInterval(timer);
+
+  // Start the new timer
+  startTimer();
+
+  // Show the game started message
+  gameStartedMessage.style.display = "block";
+
+
+  // Hide the "Play Now" button
+  playNowButton.style.display = "none";
+});
+
+  // Function to update the chicken legs display
+  function updateChickenLegsDisplay() {
+    chickenLegsDisplay.textContent = chickenLegs + " Chicken Legs";
+  }
+
+  // Function to update the money display
+  function updateMoneyDisplay() {
+    money = chickenLegs * 10; // 1 chicken leg = Rs. 10
+    moneyDisplay.textContent = "Rs. " + money;
+  }
+
+  // Function to hide all the images
+  function hideImages() {
+    var images = document.querySelectorAll(".box img");
+    for (var i = 0; i < images.length; i++) {
+      images[i].style.display = "none";
+    }
+  }
+
+  // Function to show the congratulations popup and open a blank page
+// Variables for chicken legs and money
+var chickenLegs = 10;
+var money = 100;
+
+var chickenLegsDisplay = document.getElementById("chicken-legs-display");
+var moneyDisplay = document.getElementById("money-display");
+
+function showCongratulationsPopup() {
+  var totalChickenLegs = chickenLegs;
+  var chickenLegsValue = chickenLegs * 10;
+  var popupMessage1 = "Congratulations! You earned " + totalChickenLegs + " Chicken Legs.";
+  var popupMessage2 = "The value of these Chicken Legs is Rs. " + chickenLegsValue + ".";
+  var revealedImageIndex = -1;
+  var boxes = document.querySelectorAll(".box");
+
+  var asuraImageSources = [
+    "https://drive.google.com/uc?id=1fLjElN_2Ia4kw4dzs-sJ51EPR7D4Nkly",
+    "https://drive.google.com/uc?id=1fLjElN_2Ia4kw4dzs-sJ51EPR7D4Nkly",
+    "https://drive.google.com/uc?id=1fLjElN_2Ia4kw4dzs-sJ51EPR7D4Nkly",
+    "https://drive.google.com/uc?id=1fLjElN_2Ia4kw4dzs-sJ51EPR7D4Nkly",
+    "https://drive.google.com/uc?id=1fLjElN_2Ia4kw4dzs-sJ51EPR7D4Nkly",
+    "https://drive.google.com/uc?id=1fLjElN_2Ia4kw4dzs-sJ51EPR7D4Nkly",
+    "https://drive.google.com/uc?id=1fLjElN_2Ia4kw4dzs-sJ51EPR7D4Nkly",
+    "https://drive.google.com/uc?id=1fLjElN_2Ia4kw4dzs-sJ51EPR7D4Nkly"
+  ];
+  var kingLionImageSource = "https://drive.google.com/uc?id=1A2M119BI-axAXeznPl9elD3AAeYllSk8";
+
+  function displayGoldenCavesImages() {
+    var textElement = document.createElement("p");
+    textElement.textContent = "Choose Wisely! Unlock Your Luck";
+    textElement.style.textAlign = "center";
+    textElement.style.fontSize = "18px";
+    textElement.style.marginTop = "20px";
+    document.body.insertBefore(textElement, document.querySelector(".container"));
+
+    var shuffledImages = shuffleArray(asuraImageSources.concat([kingLionImageSource]));
+
+    for (var i = 0; i < boxes.length; i++) {
+      var image = document.createElement("img");
+      image.src = "https://drive.google.com/uc?id=1oNdVk74uLN0ccXcjA47iQcBhRv3-sNeu"; // Golden Cave image source
+      image.alt = "Golden Caves";
+      image.dataset.index = i;
+      image.addEventListener("click", revealAllImages);
+
+      boxes[i].innerHTML = "";
+      boxes[i].appendChild(image);
+      image.classList.add("hidden");
+
+      if (shuffledImages[i]) {
+        image.dataset.imageSource = shuffledImages[i];
+      }
+    }
+  }
+
+  function revealAllImages() {
+    var clickedIndex = this.dataset.index;
+    var messageDisplayed = false;
+
+    for (var i = 0; i < boxes.length; i++) {
+      var image = boxes[i].querySelector("img");
+      if (image) {
+        if (i === boxes.length - 1) {
+          image.src = image.dataset.imageSource; // King Lion image source
+          if (i === parseInt(clickedIndex) && !messageDisplayed) {
+            var message = "Congratulations! You encountered the King Lion. You win the game!";
+            displayGameResult(message);
+            messageDisplayed = true;
+            totalChickenLegs *= 3; // Multiply chicken legs by 3
+            chickenLegsValue = totalChickenLegs * 10; // Update chickenLegsValue
+            updateChickenLegsDisplay();
+            updateMoneyDisplay();
+          }
+        } else {
+          image.src = image.dataset.imageSource; // Asura image source
+          if (i === parseInt(clickedIndex) && !messageDisplayed) {
+            var message = "Game over! You encountered an Asura. You lose!";
+            displayGameResult(message);
+            messageDisplayed = true;
+            totalChickenLegs = 0; // Set totalChickenLegs to 0
+            chickenLegsValue = 0; // Set chickenLegsValue to 0
+            updateChickenLegsDisplay();
+            updateMoneyDisplay();
+          }
+        }
+
+        image.style.visibility = "visible";
+      }
+    }
+  }
+
+  function displayGameResult(message) {
+    var resultElement = document.createElement("p");
+    resultElement.textContent = message;
+    resultElement.style.textAlign = "center";
+    resultElement.style.fontSize = "18px";
+    resultElement.style.marginTop = "20px";
+    document.body.insertBefore(resultElement, document.querySelector(".container"));
+  }
+
+  function startGame() {
+    displayGoldenCavesImages();
+
+    for (var i = 0; i < boxes.length; i++) {
+      var image = boxes[i].querySelector("img");
+      image.addEventListener("click", function () {
+        revealAllImages.call(this);
+        disableRemainingImages.call(this);
+      });
+    }
+  }
+
+  function disableRemainingImages() {
+    for (var i = 0; i < boxes.length; i++) {
+      var image = boxes[i].querySelector("img");
+      if (image !== this) {
+        image.removeEventListener("click", revealAllImages);
+        image.style.pointerEvents = "none";
+      }
+    }
+  }
+
+  function shuffleArray(array) {
+    var currentIndex = array.length,
+      temporaryValue,
+      randomIndex;
+
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+
+    return array;
+  }
+
+  function updateChickenLegsDisplay() {
+    chickenLegsDisplay.textContent = totalChickenLegs + " Chicken Legs";
+  }
+
+  function updateMoneyDisplay() {
+    moneyDisplay.textContent = "Rs. " + chickenLegsValue;
+  }
+
+  startGame();
+  displayPopupMessages();
+}
+
+function displayPopupMessages() {
+  var messageElement1 = document.createElement("p");
+  messageElement1.textContent = popupMessage1;
+  messageElement1.style.textAlign = "center";
+  messageElement1.style.fontSize = "18px";
+  messageElement1.style.marginTop = "20px";
+  document.body.insertBefore(messageElement1, document.querySelector(".container"));
+
+  var messageElement2 = document.createElement("p");
+  messageElement2.textContent = popupMessage2;
+  messageElement2.style.textAlign = "center";
+  messageElement2.style.fontSize = "18px";
+  messageElement2.style.marginTop = "20px";
+  document.body.insertBefore(messageElement2, document.querySelector(".container"));
+}
+
+showCongratulationsPopup();
+
+
+
+// Example usage:
+//var chickenLegs = 5;
+//showCongratulationsPopup();
+
+
+
+</script>
+</body>
+</html>
